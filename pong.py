@@ -8,7 +8,7 @@ wn.tracer(0)
 
 score_a = 0
 score_b = 0
-ball_color = [0]
+ball_color = 0
 colors = ["white", "green", "blue", "red", "yellow", "pink", "orange"]
 
 # Paddle A
@@ -35,7 +35,7 @@ paddle_b.goto(350, 0)
 ball = turtle.Turtle()
 ball.speed(0)
 ball.shape('circle')
-ball.color(colors[ball_color[0]])
+ball.color(colors[ball_color])
 ball.penup()
 ball.goto(0, 0)
 ball.dx = 0.25
@@ -78,10 +78,11 @@ def paddle_down(paddle):
 
 
 def tab():
-    if ball_color[0] == len(colors) - 1:
-        ball_color[0] = 0
+    global ball_color
+    if ball_color == len(colors) - 1:
+        ball_color = 0
     else:
-        ball_color[0] += 1
+        ball_color += 1
 
 
 # Keyboard binding
@@ -90,14 +91,14 @@ wn.onkeypress(lambda: paddle_up(paddle_a), "w")
 wn.onkeypress(lambda: paddle_down(paddle_a), "s")
 wn.onkeypress(lambda: paddle_up(paddle_b), "Up")
 wn.onkeypress(lambda: paddle_down(paddle_b), "Down")
-wn.onkeypress(lambda: tab(), "Tab")
+wn.onkeypress(tab, "Tab")
 
 
 # main game loop
 while True:
     wn.update()
 
-    ball.color(colors[ball_color[0]])
+    ball.color(colors[ball_color])
     # Move
     ball.setx(ball.xcor() + ball.dx)
     ball.sety(ball.ycor() + ball.dy)
@@ -123,8 +124,8 @@ while True:
     # Paddle hit check
     if ball.xcor() == (paddle_a.xcor() + 10) and ball.ycor() < (paddle_a.ycor() + 30) and ball.ycor() > (paddle_a.ycor() - 30):
         ball.dx *= -1
-        ball.color('red')
+        tab()
 
     if ball.xcor() == (paddle_b.xcor() - 10) and ball.ycor() < (paddle_b.ycor() + 30) and ball.ycor() > (paddle_b.ycor() - 30):
         ball.dx *= -1
-        ball.color('blue')
+        tab()
